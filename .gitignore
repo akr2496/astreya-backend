@@ -1,2 +1,5 @@
 /node_modules
 /astreya-testing1.json
+/.env
+rsa_key.p8
+rsa_key.pub

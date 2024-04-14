@@ -56,6 +56,29 @@ async function runQuery(sqlQuery) {
   }
 }
 
+async function runQueryV2(sqlQuery) {
+  console.log(sqlQuery);
+  try {
+    const [result] = await bigquery.query(sqlQuery);
+    
+    const fields = Object.keys(result[0]);
+    const rows = result.map(row => {
+      const rowData = {};
+      fields.forEach(field => {
+        rowData[field] = row[field];
+      });
+      return rowData;
+    });
+
+    // Return both schema and data
+    return { fields: fields, rows: rows };
+  } catch (error) {
+    console.error('Error running query:', error);
+    throw error; // Rethrow the error to handle it outside this function
+  }
+}
+
+
 /*************************************************************************************************************
  * 
  * Endpoint for executing a BigQuery query
@@ -100,8 +123,9 @@ router.post('/run', async (req, res) => {
     return res.status(400).json({ error: 'SQL query is required.' });
   }
   try {
-    const [rows] = await runQuery(sqlQuery);
-    res.json(rows);
+    // const [rows] = await runQuery(sqlQuery);
+    const { fields, rows } = await runQueryV2(sqlQuery);
+    res.json( { fields: fields, rows: rows });
   } catch (error) {
     console.error('Error executing query:', error);
     res.status(500).json({ error: 'An error occurred while executing the query.' });

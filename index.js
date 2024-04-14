@@ -3,6 +3,10 @@ const googleRoutes = require('./Routes/google');
 const snowflakeRoutes = require('./Routes/snowflake');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const logger = require('easy-logging');
+
+// Manually specify the config file path
+// logger.configure({ file: './esaylogging++.conf' });
 
 const app = express();
 const port = 8080;

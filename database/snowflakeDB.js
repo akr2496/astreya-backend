@@ -1,15 +1,15 @@
 const snowflake = require('snowflake-sdk');
 const crypto = require('crypto');
 const fs = require('fs');
-const { promisify } = require('util');
-const { exec } = require('child_process');
+require('dotenv').config();
+
 
 const privateKeyFile = fs.readFileSync('/Users/ashishranjan/Desktop/Personal/InterviewPrep/astreya/backend/rsa_key.p8');
 
 const privateKeyObject = crypto.createPrivateKey({
   key: privateKeyFile,
   format: 'pem',
-  passphrase: 'Howdy'
+  passphrase: process.env.SNOW_PASSPHRASE,
 });
 
 var privateKey = privateKeyObject.export({
@@ -18,9 +18,9 @@ var privateKey = privateKeyObject.export({
 });
 
 const connectionConfig = {
-    account: 'enpvoiq-ez72950',
-    username: 'SNOW345IK',
-    password: 'ball@2894BG',
+    account: process.env.SNOW_ACCOUNT,
+    username: process.env.SNOW_USERNAME,
+    password: process.env.SNOW_PASSWORD,
     authenticator: "SNOWFLAKE_JWT",
     privateKey: privateKey
 };
